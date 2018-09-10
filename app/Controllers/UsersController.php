@@ -37,7 +37,7 @@
 			
 		}
 
-		public function addUser($request,$response, $args)
+		public function addUser($request, $response, $args)
 		{
 			$params = $request->getParsedBody();
 
@@ -48,8 +48,7 @@
 			if( $users->validate($params) ) {
 				return $params['username'];
 			} else {
-				$errors = ['code' => "error", "message" => $users->errors()];
-				return $response->withJSON($errors);
+				return $response->withJSON($users->errors());
 			}
 
 			//return $response->withJSON(["message" => "Successfully Created"]);

@@ -14,7 +14,7 @@ class Users extends Model {
 	protected $table;
 	protected $guarded = ['id'];
     public    $timestamps = false;
-    protected $errors;
+    public 	  $errors;
     protected $rules = [
     	"username" => "required|max:3",
     	"password" => "required"
