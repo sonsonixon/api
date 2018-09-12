@@ -19,7 +19,8 @@
     	public function getAllUsers($request, $response, $args)
 		{
 			$users = new Users();
-			return $response->withJSON($users->all());
+			$data['data'] = $users->all();
+			return $response->withJSON($data);
 		}
 
 		public function getUser($request, $response, $args)
@@ -41,17 +42,16 @@
 		{
 			$params = $request->getParsedBody();
 
-			//var_dump($params['username']);
-
 			$users = new Users;
 
-			if( $users->validate($params) ) {
-				return $params['username'];
-			} else {
-				return $response->withJSON($users->errors());
+			if($users->validate($params)){
+				if($users->save()){
+					return $response->withJSON(["code" => "success", "message" => "Successfully Created"]);
+				}
+			} 
+			else{
+				return $response->withJSON(["code" => "error", "errors" => $users->errors()]);
 			}
-
-			//return $response->withJSON(["message" => "Successfully Created"]);
 		}
 
 

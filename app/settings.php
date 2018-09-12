@@ -20,7 +20,7 @@ return [
         'database' => [
             'driver'    => 'mysql',
             'host'      => 'localhost',
-            'database'  => 'xde-hrms',
+            'database'  => 'my-app',
             'username'  => 'root',
             'password'  => '',
             'charset'   => 'utf8',

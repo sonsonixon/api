@@ -13,7 +13,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     protected $errors;
     protected $rules = [];
 
-
     public static function getResolver()
     {
         return parent::$resolver;
@@ -22,6 +21,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
   	public function validate($data)
     {
         $factory = new ValidatorFactory();
+
         $v = $factory->make($data, $this->rules);
 
         if($v->passes()){
@@ -31,7 +31,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         }else{
         	$this->errors = $v->errors();
         }
-
 
         return $v->passes();
     }

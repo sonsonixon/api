@@ -14,11 +14,11 @@ class Users extends Model {
 	protected $table;
 	protected $guarded = ['id'];
     public    $timestamps = false;
-    public 	  $errors;
+    protected $errors;
     protected $rules = [
-    	"username" => "required|max:3",
-    	"password" => "required"
-
+    	"username" => "required|max:8",
+    	"password" => "required",
+        "status" => "required"
     ];
 
     public function errors()
