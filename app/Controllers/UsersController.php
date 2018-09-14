@@ -1,18 +1,24 @@
 <?php 
 	namespace App\Controllers;
 
-
 	use App\Models\Users;
-
 	
-	class UsersController{
+	class UsersController extends FunctionController{
 
-		// protected $dates = ['deleted_at'];
+		protected $dates = ['deleted_at'];
 
 
 		public function __construct()
 		{
 			
+		}
+
+		public static function boot()
+		{
+		  	parent::boot();
+		  	self::creating(function ($model) {
+		    	$model->uuid = (string)Uuid::generate();
+		  	});
 		}
 
 
@@ -27,14 +33,9 @@
 		{
 			$users = new Users();
 
-			$id = $users->where('username', '=', $args['id'])->first();
+			$result = $users->where('id', $args['id'])->first();
 
-			if($id){
-				return $response->withJSON(["message" => "Success", "id" => $id['employee_uuid']]);
-			}
-			else{
-				return $response->withJSON(["message" => "Failed"]);
-			}
+			return $response->withJSON($result);
 			
 		}
 
@@ -53,6 +54,29 @@
 				return $response->withJSON(["code" => "error", "errors" => $users->errors()]);
 			}
 		}
+
+		public function updateUser($request, $response, $args)
+		{
+			$params = $request->getParsedBody();
+
+			$users = new Users;
+
+			if($users->validate($params)){
+				if($users->where('id', $args['id'])->update($params)){
+					return $response->withJSON(["code" => "success", "title" => "Update Success", "message" => "Changes has been saved"]);
+				}
+			} 
+			else{
+				return $response->withJSON(["code" => "error", "errors" => $users->errors()]);
+			}
+
+			/*$users->where('id', $args['id'])->update($params);
+	
+			
+
+			return $response->withJSON(["message" => "Successfully Updated"]);*/
+		}
+
 
 
     	/*public function add($request,$response, $args)
@@ -73,17 +97,7 @@
 		}
 
 
-    	public function update($request,$response, $args)
-		{
-
-			$params = $request->getParsedBody();
-
-			Table::where('id',$args['id'])->update($params);
-
-
-			return $response->withJSON(["message" => "Successfully Updated"]);
-		}
-
+    	
 
     	public function delete($request,$response, $args)
 		{

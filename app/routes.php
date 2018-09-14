@@ -22,8 +22,12 @@ $app->group('/table', function () use ($app) {
 $app->group('/users', function () use ($app) {
 	
 	$app->get("", 	"App\Controllers\UsersController:getAllUsers");
-	$app->get("/{id}", 	"App\Controllers\UsersController:getUser");
+	
 	$app->post("/add", 	"App\Controllers\UsersController:addUser");
+
+	$app->get("/get/{id}", 	"App\Controllers\UsersController:getUser");
+
+	$app->post("/update/{id}", 	"App\Controllers\UsersController:updateUser");
 
 	/*
 	$app->post("", 	"App\Controllers\TableController:add");

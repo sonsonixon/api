@@ -16,7 +16,7 @@ class Users extends Model {
     public    $timestamps = false;
     protected $errors;
     protected $rules = [
-    	"username" => "required|max:8",
+    	"username" => "required|alpha|min:6",
     	"password" => "required",
         "status" => "required"
     ];
@@ -25,5 +25,7 @@ class Users extends Model {
     {
     	return $this->errors;
     }
+
+
 
 }
