@@ -25,9 +25,11 @@ $app->group('/users', function () use ($app) {
 	
 	$app->post("/add", 	"App\Controllers\UsersController:addUser");
 
-	$app->get("/get/{id}", 	"App\Controllers\UsersController:getUser");
+	$app->get("/get/{uuid}", 	"App\Controllers\UsersController:getUser");
 
-	$app->post("/update/{id}", 	"App\Controllers\UsersController:updateUser");
+	$app->post("/update/{uuid}", 	"App\Controllers\UsersController:updateUser");
+
+	// ->add(new App\Middlewares\Authentication()) // Add middleware to route
 
 	/*
 	$app->post("", 	"App\Controllers\TableController:add");

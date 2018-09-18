@@ -1,31 +1,24 @@
 <?php 
 	namespace App\Controllers;
 
-	use App\Models\Users;
+	use App\Models\Users;	
+	use App\Helpers\Helpers;
 	
-	class UsersController extends FunctionController{
+	class UsersController {
 
-		protected $dates = ['deleted_at'];
-
+		// protected $dates = ['deleted_at'];
 
 		public function __construct()
 		{
 			
 		}
 
-		public static function boot()
-		{
-		  	parent::boot();
-		  	self::creating(function ($model) {
-		    	$model->uuid = (string)Uuid::generate();
-		  	});
-		}
-
-
     	public function getAllUsers($request, $response, $args)
 		{
 			$users = new Users();
+
 			$data['data'] = $users->all();
+
 			return $response->withJSON($data);
 		}
 
@@ -33,7 +26,7 @@
 		{
 			$users = new Users();
 
-			$result = $users->where('id', $args['id'])->first();
+			$result = $users->where('uuid', $args['uuid'])->first();
 
 			return $response->withJSON($result);
 			
@@ -41,15 +34,19 @@
 
 		public function addUser($request, $response, $args)
 		{
+			$users = new Users;
+			$helpers = new Helpers;
+
 			$params = $request->getParsedBody();
 
-			$users = new Users;
+			$params['uuid'] = $helpers->uuid(); // generate UUID
+			$params['password'] = password_hash($params['password'], PASSWORD_DEFAULT);; // add hashed password to parameters
 
 			if($users->validate($params)){
 				if($users->save()){
 					return $response->withJSON(["code" => "success", "message" => "Successfully Created"]);
 				}
-			} 
+			}
 			else{
 				return $response->withJSON(["code" => "error", "errors" => $users->errors()]);
 			}
@@ -62,7 +59,7 @@
 			$users = new Users;
 
 			if($users->validate($params)){
-				if($users->where('id', $args['id'])->update($params)){
+				if($users->where('uuid', $args['uuid'])->update($params)){
 					return $response->withJSON(["code" => "success", "title" => "Update Success", "message" => "Changes has been saved"]);
 				}
 			} 
